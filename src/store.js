@@ -106,8 +106,20 @@ export default new Vuex.Store({
             });
         },
 
+        //get all activities
         getActivities(context) {
             axios.get("/api/activities")
+            .then(response => {
+                context.commit('setActivities',response.data.activities);
+            }).catch(err => {
+                console.log("getActivities failed: ",err);
+            });
+        },
+
+        //get activities for a specific day
+        getActivities(context, day) {
+            console.log()
+            axios.get("/api/activities/" + day)
             .then(response => {
                 context.commit('setActivities',response.data.activities);
             }).catch(err => {

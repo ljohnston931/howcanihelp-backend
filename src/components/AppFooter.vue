@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
             <p>Created by: Lucy Johnston</p>
-            <p><a href="https://github.com/ljohnston931/backend_practice">Code on Github</a> </p>        
+            <p><a href="https://github.com/ljohnston931/howcanihelp-backend">Code on Github</a> </p>        
             
     </div>
 </template>

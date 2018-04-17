@@ -19,54 +19,32 @@ export default {
     name: 'Monday',
     data () {
         return {
-            //items: []
             text: '', //?
         }
 
     },
     created: function() {
-        this.$store.dispatch('getActivities');
+        this.$store.dispatch('getActivities',0);
     },
     computed: {
-        /*filteredItems: function() {
-            return this.items.filter(function(item) {
-                return item.day === 0;
-            });
-            return this.items;
-        }*/
         activities: function() {
             return this.$store.getters.activities;
         },
     },
     methods: {
-        /*deleteItem: function(item) {
-        axios.delete("/api/items/" + item.id).then(response => {
-                this.getItems();
-                return true;
-            }).catch(err => {
-            });
-        },
-        getItems: function() {
-            axios.get("/api/items").then(response => {
-                this.items = response.data;
-                return true;
-            }).catch(err => {
-            });
-        }*/
         activity: function() {
             this.$store.dispatch('addActivity',{
                 name: this.text,
                 link: this.link,
-                day: this.dayText,
+                day: this.day,
                 time: this.time,
                 description: this.description,
             }).then(response => {
                 this.text = "";
-                this.dayText = '';
+                this.day = '';
                 this.link = '';
                 this.time = '';
                 this.description = '';
-                this.getItems();
                 return true;
             }).catch(err => {
             });

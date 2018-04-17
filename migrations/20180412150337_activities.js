@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
             table.increments('id').primary();
             table.string('name').notNullable();
             table.string('link');
-            table.string('dayText').notNullable();
+            table.integer('day').notNullable();
             table.string('time').notNullable();
             table.string('description').notNullable();
             table.integer('createdBy').unsigned().notNullable()

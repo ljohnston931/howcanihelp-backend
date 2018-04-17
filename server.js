@@ -76,7 +76,7 @@ app.post('/api/activities', (req,res) => {
     if (!req.body.name || !req.body.link || !req.body.day || !req.body.time || !req.body.description)
         return res.status(400).send();
     knex('activities').insert({name: req.body.name, 
-        link: req.body.link, dayText: req.body.dayText, time: req.body.time, 
+        link: req.body.link, day: req.body.day, time: req.body.time, 
         description: req.body.description, createdBy: req.params.user_id})
     .then(ids => {
         return knex('activities').where('id',ids[0]).first();
@@ -93,6 +93,17 @@ app.post('/api/activities', (req,res) => {
 //get activities
 app.get('/api/activities', (req, res) => {
     knex('activities').select("*")
+    .then(activities => {
+        res.status(200).json({activities});
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({error});
+    });
+});
+
+app.get('/api/activities/:day', (req, res) => {
+    //let day = parseInt(req.params.day);
+    knex('activities').select("*").where('day', req.params.day)
     .then(activities => {
         res.status(200).json({activities});
     }).catch(error => {

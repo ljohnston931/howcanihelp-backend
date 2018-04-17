@@ -7,7 +7,7 @@
                     <input type="text" id="title" v-model="text">
                     <br>
                     <label for="doweek">Day of the Week:</label>
-                    <select id="doweek" v-model="dayText" name="day">
+                    <select id="doweek" v-model="day" name="day">
                         <option value='0'>Monday</option>
                         <option value='1'>Tuesday</option>
                         <option value='2'>Wednesday</option>
@@ -40,7 +40,7 @@ export default {
         return {
             items: [],
             text: '',
-            dayText: '',
+            day: '',
             link: '',
             time: '',
             description: ''
@@ -48,10 +48,8 @@ export default {
     },
 
     /*created: function() {
-    this.getItems();}*/
-    created: function() {
         this.$store.dispatch('getActivities');
-    },
+    },*/
     
     computed: {
         /*notCommittedItems: function() {
@@ -71,9 +69,9 @@ export default {
             });
             return this.items;
         },*/
-        day: function() {
+        /*day: function() {
             return parseInt(this.dayText);
-        },
+        },*/
         activities: function() {
             return this.$store.getters.activities;
         },
@@ -122,17 +120,16 @@ export default {
             this.$store.dispatch('addActivity',{
                 name: this.text,
                 link: this.link,
-                day: this.dayText,
+                day: this.day,
                 time: this.time,
                 description: this.description,
             }).then(response => {
                 this.text = "";
-                this.dayText = '';
+                this.day = '';
                 this.link = '';
                 this.time = '';
                 this.description = '';
-                this.getItems();
-                return true;
+                return context.dispatch('getActivities');
             }).catch(err => {
             });
         },
