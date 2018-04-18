@@ -12,8 +12,5 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App),
-  beforeCreate() {
-    this.$store.dispatch('initialize');
-  }
+  render: h => h(App)
 })

@@ -52,14 +52,10 @@ app.post('/api/login', (req,res) => {
         }
         return [bcrypt.compare(req.body.password, user.hash),user];
     }).spread((result,user) => {
-        if (result) {
-            let token = jwt.sign({id: user.id}, jwtSecret, {
-                //expiresIn: 86400
-            });
-            res.status(200).json({user:{user_id:user.user_id, username:user.username},token:token});
-        } else {
+        if (result) 
+            res.status(200).json({user:{user_id:user.user_id, username:user.username}});
+        else 
             res.status(403).send("Invalid credentials");
-        }
         return;
         }).catch(error => {
             if (error.message !== 'abort') {
@@ -85,10 +81,7 @@ app.post('/api/users',(req,res) => {
     }).then(ids => {
         return knex('users').where('user_id',ids[0]).first().select('user_id','username');
     }).then(user => {
-        let token = jwt.sign({id:user.user_id},jwtSecret,{
-            //expiresIn: 86400
-        });
-        res.status(200).json({user:user,token:token});
+        res.status(200).json({user:user});
         return;
     }).catch(error => {
         if (error.message !== 'abort') {
@@ -134,15 +127,7 @@ app.get('/api/me',verifyToken, (req,res) => {
 });
 
 //create an activity
-app.post('/api/activities/:user_id', verifyToken, (req,res) => {
-    let user_id = parseInt(req.params.user_id)
-    //console.log("1st: "+user_id);
-    //console.log("2nd: "+req.userID);
-    if (user_id !== req.userID)
-    {
-        res.status(403).send();
-        return;
-    }
+app.post('/api/activities/', (req,res) => {
     if (!req.body.name || !req.body.link || !req.body.day || !req.body.time || !req.body.description)
         return res.status(400).send();
     knex('activities').insert({name: req.body.name, 
@@ -161,17 +146,9 @@ app.post('/api/activities/:user_id', verifyToken, (req,res) => {
 });
 
 //delete activity
-app.delete('/api/activities/:user_id/:id',verifyToken,(req,res) => {
+app.delete('/api/activities/:id',(req,res) => {
     console.log("entered delete");
     let id = parseInt(req.params.id);
-    let user_id = parseInt(req.params.user_id);
-    console.log("1st: "+user_id);
-    console.log("2nd: "+req.userID);
-    if (user_id !== req.userID)
-    {
-        res.status(403).send();
-        return;
-    }
     knex('activities').where('id',id).first().del()
     .then(activity => {
         res.sendStatus(200);

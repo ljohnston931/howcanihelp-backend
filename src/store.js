@@ -12,8 +12,7 @@ const getAuthHeader = () => {
 export default new Vuex.Store({
     state: {
         user: {},
-        token: '',
-        //loggedIn: false,
+        loggedIn: false,
         loginError: '',
         registerError: '',
         activities: [],
@@ -21,12 +20,7 @@ export default new Vuex.Store({
     },
     getters: {
         user: state => state.user,
-        getToken: state => state.token,
-        loggedIn: state => {
-            if (state.token === '')
-                return false;
-            return true;
-        },
+        loggedIn: state => state.loggedIn,
         loginError: state => state.loginError,
         registerError: state => state.registerError,
         activities: state => state.activities,
@@ -36,16 +30,9 @@ export default new Vuex.Store({
         setUser(state,user) {
             state.user = user;
         },
-        setToken(state,token) {
-            state.token = token;
-            if(token === '')
-                localStorage.removeItem('token');
-            else
-                localStorage.setItem('token',token);
-        },
-        /*setLogin(state,status) {
+        setLogin(state,status) {
             state.loggedIn = status;
-        },*/
+        },
         setLoginError(state,message) {
             state.loginError = message;
         },
@@ -64,7 +51,7 @@ export default new Vuex.Store({
     actions: {
 
         //initialize
-        initialize(context) {
+       /* initialize(context) {
             console.log("initializing");
             let token = localStorage.getItem('token');
             console.log(token);
@@ -78,20 +65,20 @@ export default new Vuex.Store({
                     context.commit('setToken','');
                 });
             
-        },
+        },*/
 
         //register new user
         register(context,user) {
-            return axios.post("/api/users",user)
+            axios.post("/api/users",user)
             .then(response => {
                 context.commit('setUser',response.data.user);
-                context.commit('setToken',response.data.token);
+                context.commit('setLogin',true);
                 context.commit('setLoginError',"");
                 context.commit('setRegisterError',"");
                 //context.commit('setAdmin',false);
             }).catch(error => {
                 context.commit('setUser',{});
-                context.commit('setToken','');
+                context.commit('setLogin',false);
                 context.commit('setLoginError','');
                 if (error.response) {
                     if (error.response.status === 403)
@@ -104,11 +91,10 @@ export default new Vuex.Store({
 
         //login
         login(context,user) {
-           return axios.post("/api/login",user)
+           axios.post("/api/login",user)
             .then(response => {
-                console.log(this.state.loggedIn);
                 context.commit('setUser',response.data.user);
-                context.commit('setToken',response.data.token);
+                context.commit('setLogin',true);
                 context.commit('setRegisterError',"");
                 context.commit('setLoginError',"");
                 console.log(this.state.loggedIn);
@@ -118,7 +104,6 @@ export default new Vuex.Store({
             }).catch(error => {
                 console.log("error")
                 context.commit('setUser',{});
-                context.commit('setToken','');
                 context.commit('setRegisterError','');
                 if (error.response) {
                     if (error.response.status === 403 || error.response.status === 400)
@@ -133,7 +118,7 @@ export default new Vuex.Store({
         //logout
         logout(context,user) {
             context.commit('setUser', {});
-            context.commit('setToken','');
+            context.commit('setLogin',false);
             //context.commit('setAdmin',false);
         },
 
@@ -161,8 +146,7 @@ export default new Vuex.Store({
 
         //add an activity
         addActivity(context,activity) {
-            console.log("id for add:" +context.state.user.user_id);
-            axios.post("/api/activities/"+context.state.user.user_id,activity,getAuthHeader())
+            axios.post("/api/activities/",activity)
             .then(response => {
                 return context.dispatch('getActivities');
             }).catch(err => {
@@ -172,7 +156,7 @@ export default new Vuex.Store({
         
         //delete an activity
         deleteActivity(context, id) {
-            return axios.delete("/api/activities/"+context.state.user.user_id+"/"+id,getAuthHeader())
+            return axios.delete("/api/activities/"+id)
             .then(response => {
             context.dispatch('getAllActivities');
             }).catch(err => {
