@@ -161,8 +161,17 @@ app.post('/api/activities/:user_id', verifyToken, (req,res) => {
 });
 
 //delete activity
-app.delete('/api/activities/:id',(req,res) => {
+app.delete('/api/activities/:user_id/:id',verifyToken,(req,res) => {
+    console.log("entered delete");
     let id = parseInt(req.params.id);
+    let user_id = parseInt(req.params.user_id);
+    console.log("1st: "+user_id);
+    console.log("2nd: "+req.userID);
+    if (user_id !== req.userID)
+    {
+        res.status(403).send();
+        return;
+    }
     knex('activities').where('id',id).first().del()
     .then(activity => {
         res.sendStatus(200);

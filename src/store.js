@@ -137,17 +137,6 @@ export default new Vuex.Store({
             //context.commit('setAdmin',false);
         },
 
-        //add an activity
-        addActivity(context,activity) {
-            console.log("id for add:" +context.state.user.user_id);
-            axios.post("/api/activities/"+context.state.user.user_id,activity,getAuthHeader())
-            .then(response => {
-                return context.dispatch('getActivities');
-            }).catch(err => {
-                console.log("addActivity failed:",err)
-            });
-        },
-
         //get all activities
         getAllActivities(context) {
             console.log("entered in all")
@@ -169,10 +158,21 @@ export default new Vuex.Store({
                 console.log("getActivities failed: ",err);
             });
         },
+
+        //add an activity
+        addActivity(context,activity) {
+            console.log("id for add:" +context.state.user.user_id);
+            axios.post("/api/activities/"+context.state.user.user_id,activity,getAuthHeader())
+            .then(response => {
+                return context.dispatch('getActivities');
+            }).catch(err => {
+                console.log("addActivity failed:",err)
+            });
+        },
         
         //delete an activity
         deleteActivity(context, id) {
-            return axios.delete("/api/activities/" + id)
+            return axios.delete("/api/activities/"+context.state.user.user_id+"/"+id,getAuthHeader())
             .then(response => {
             context.dispatch('getAllActivities');
             }).catch(err => {
