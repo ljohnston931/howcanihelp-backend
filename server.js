@@ -98,43 +98,12 @@ app.post('/api/users',(req,res) => {
     });
 }); 
 
-
-
-
-//create an activity
-app.post('/api/activities/:user_id', verifyToken, (req,res) => {
-    let user_id = parseInt(req.params.user_id)
-    console.log("1st: "+user_id);
-    console.log("2nd: "+req.userID);
-    if (user_id !== req.userID)
-    {
-        console.log(user_id);
-        console.log(req.userID);
-        res.status(403).send();
-        return;
-    }
-    if (!req.body.name || !req.body.link || !req.body.day || !req.body.time || !req.body.description)
-        return res.status(400).send();
-    knex('activities').insert({name: req.body.name, 
-        link: req.body.link, day: req.body.day, time: req.body.time, 
-        description: req.body.description, createdBy: req.params.user_id})
-    .then(ids => {
-        return knex('activities').where('id',ids[0]).first();
-    }).then(activity => {
-        res.status(200).json({activity:activity});
-        return;
-    }) 
-    .catch(error => {
-        console.log(error);
-        res.status(500).json({error});
-    });
-});
-
 //get activities
-app.get('/api/activities', (req, res) => {
+app.get('/api/activities/all', (req, res) => {
     knex('activities').select("*")
     .then(activities => {
-        res.status(200).json({activities});
+        console.log("activities:"+activities);
+        res.status(200).json({activities: activities});
     }).catch(error => {
         console.log(error);
         res.status(500).json({error});
@@ -161,6 +130,33 @@ app.get('/api/me',verifyToken, (req,res) => {
     }).catch(error => {
         console.log(error);
         res.status(500).json({ error });
+    });
+});
+
+//create an activity
+app.post('/api/activities/:user_id', verifyToken, (req,res) => {
+    let user_id = parseInt(req.params.user_id)
+    //console.log("1st: "+user_id);
+    //console.log("2nd: "+req.userID);
+    if (user_id !== req.userID)
+    {
+        res.status(403).send();
+        return;
+    }
+    if (!req.body.name || !req.body.link || !req.body.day || !req.body.time || !req.body.description)
+        return res.status(400).send();
+    knex('activities').insert({name: req.body.name, 
+        link: req.body.link, day: req.body.day, time: req.body.time, 
+        description: req.body.description, createdBy: req.params.user_id})
+    .then(ids => {
+        return knex('activities').where('id',ids[0]).first();
+    }).then(activity => {
+        res.status(200).json({activity:activity});
+        return;
+    }) 
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({error});
     });
 });
 

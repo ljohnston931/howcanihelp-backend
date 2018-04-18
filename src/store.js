@@ -149,8 +149,9 @@ export default new Vuex.Store({
         },
 
         //get all activities
-        getActivities(context) {
-            axios.get("/api/activities")
+        getAllActivities(context) {
+            console.log("entered in all")
+            axios.get("/api/activities/all")
             .then(response => {
                 context.commit('setActivities',response.data.activities);
             }).catch(err => {
@@ -160,6 +161,7 @@ export default new Vuex.Store({
 
         //get activities for a specific day
         getActivities(context, day) {
+            console.log("entered in the specific day get");
             axios.get("/api/activities/" + day)
             .then(response => {
                 context.commit('setActivities',response.data.activities);
@@ -172,7 +174,7 @@ export default new Vuex.Store({
         deleteActivity(context, id) {
             return axios.delete("/api/activities/" + id)
             .then(response => {
-            context.dispatch('getActivities');
+            context.dispatch('getAllActivities');
             }).catch(err => {
                 console.log("delete failed: ",err);
             });

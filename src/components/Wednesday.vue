@@ -2,10 +2,9 @@
     <div class="container">
         <div class="main">
             <h2>Activities On Wednesdays:</h2>
-            <p v-show="filteredItems.length === 0">Submit a new activity <router-link to="/submit">here</router-link>.</p>
-            <div id="activity" v-for="item in filteredItems">
-                <a :href="item.link">{{item.text}}</a>
-                <button v-on:click="deleteItem(item)" class="delete">X</button>
+            <p v-show="activities.length === 0">There aren't any activities yet. Add one <router-link to="/new-activities">here</router-link>.</p>
+            <div id="activity" v-for="item in activities">
+                <a :href="item.link">{{item.name}}</a>
                 <p><strong>{{item.time}}</strong></p>
                 <p id="desc">{{item.description}}</p>
             </div>
@@ -19,36 +18,36 @@ export default {
     name: 'Wednesday',
     data () {
         return {
-            items: []
+            text: '', //?
         }
 
     },
     created: function() {
-        this.getItems();
+        this.$store.dispatch('getActivities',2);
     },
     computed: {
-        filteredItems: function() {
-            return this.items.filter(function(item) {
-            return item.day === 2;
-            });
-            return this.items;
-        }
+        activities: function() {
+            return this.$store.getters.activities;
+        },
     },
     methods: {
-        deleteItem: function(item) {
-        axios.delete("/api/items/" + item.id).then(response => {
-                this.getItems();
+        activity: function() {
+            this.$store.dispatch('addActivity',{
+                name: this.text,
+                link: this.link,
+                day: this.day,
+                time: this.time,
+                description: this.description,
+            }).then(response => {
+                this.text = "";
+                this.day = '';
+                this.link = '';
+                this.time = '';
+                this.description = '';
                 return true;
             }).catch(err => {
             });
         },
-        getItems: function() {
-            axios.get("/api/items").then(response => {
-                this.items = response.data;
-                return true;
-            }).catch(err => {
-            });
-        }
 
     }
 }

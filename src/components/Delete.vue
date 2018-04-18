@@ -4,8 +4,8 @@
             <h2>Delete Activities:</h2>
             <p v-show="activities.length === 0">There aren't any activities yet. Add one <router-link to="/new-activities">here</router-link>.</p>
             <div id="activity" v-for="item in activities">
-                <a :href="item.link">{{item.name}}</a>
-                <p><strong>{{item.time}}</strong></p>
+                <p><a :href="item.link">{{item.name}}</a>
+                <strong>{{item.time}}</strong></p>
                <button v-on:click="remove(item.id)" class="delete">X</button>
             </div>
         </div>
@@ -23,7 +23,7 @@ export default {
 
     },
     created: function() {
-        this.$store.dispatch('getActivities');
+        this.$store.dispatch('getAllActivities');
     },
     computed: {
         activities: function() {
@@ -96,7 +96,7 @@ export default {
 }
 
 .delete {
-    display: block;
+    display: inline-block;
     float: right;
     background-color: #e5b121;
     border:none;

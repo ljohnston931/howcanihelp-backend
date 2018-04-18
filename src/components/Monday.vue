@@ -5,7 +5,6 @@
             <p v-show="activities.length === 0">There aren't any activities yet. Add one <router-link to="/new-activities">here</router-link>.</p>
             <div id="activity" v-for="item in activities">
                 <a :href="item.link">{{item.name}}</a>
-                <button v-on:click="deleteItem(item)" class="delete">X</button>
                 <p><strong>{{item.time}}</strong></p>
                 <p id="desc">{{item.description}}</p>
             </div>
