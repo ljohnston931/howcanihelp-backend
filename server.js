@@ -102,9 +102,14 @@ app.post('/api/users',(req,res) => {
 
 
 //create an activity
-app.post('/api/activities', verifyToken, (req,res) => {
-    if (req.body.user_id !== req.userID)
+app.post('/api/activities/:user_id', verifyToken, (req,res) => {
+    let user_id = parseInt(req.params.user_id)
+    console.log("1st: "+user_id);
+    console.log("2nd: "+req.userID);
+    if (user_id !== req.userID)
     {
+        console.log(user_id);
+        console.log(req.userID);
         res.status(403).send();
         return;
     }

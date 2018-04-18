@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main">
             <h2>Activities On Mondays:</h2>
-            <!--<p v-show="filteredItems.length === 0">Submit a new activity <router-link to="/submit">here</router-link>.</p>-->
+            <p v-show="activities.length === 0">There aren't any activities yet. Add one <router-link to="/new-activities">here</router-link>.</p>
             <div id="activity" v-for="item in activities">
                 <a :href="item.link">{{item.name}}</a>
                 <button v-on:click="deleteItem(item)" class="delete">X</button>

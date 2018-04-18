@@ -139,7 +139,8 @@ export default new Vuex.Store({
 
         //add an activity
         addActivity(context,activity) {
-            axios.post("/api/activities",activity,context.state.user.user_id,getAuthHeader())
+            console.log("id for add:" +context.state.user.user_id);
+            axios.post("/api/activities/"+context.state.user.user_id,activity,getAuthHeader())
             .then(response => {
                 return context.dispatch('getActivities');
             }).catch(err => {

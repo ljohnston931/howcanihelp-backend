@@ -129,8 +129,9 @@ export default {
                 this.link = '';
                 this.time = '';
                 this.description = '';
-                return context.dispatch('getActivities');
+                //return context.dispatch('getActivities');
             }).catch(err => {
+                console.log(err);
             });
         },
     }
