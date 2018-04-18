@@ -38,10 +38,14 @@ export default {
 
     methods: {
        register: function() {
-           return this.$store.dispatch('register',{
+           this.$store.dispatch('register',{
                username: this.username,
                password: this.password,
-           });
+           }).then(response =>
+           {
+               this.username = '';
+               this.password = '';
+           })
        }
     }
 }

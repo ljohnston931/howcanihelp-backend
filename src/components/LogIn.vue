@@ -2,6 +2,7 @@
     <div class="container">
         <div class="main">
                 <h2>Login as an admin:</h2>
+                <h3>(try: admin 1234)</h3>
                 <form v-on:submit.prevent="login">
                     <label for="username">Username:</label>
                     <input type="text" id="username" v-model="username">

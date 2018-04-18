@@ -4,9 +4,41 @@
             <h2>Delete Activities:</h2>
             <p v-show="activities.length === 0">There aren't any activities yet. Add one <router-link to="/new-activities">here</router-link>.</p>
             <div id="activity" v-for="item in activities">
-                <p><a :href="item.link">{{item.name}}</a>
-                <strong>{{item.time}}</strong></p>
-               <button v-on:click="remove(item.id)" class="delete">X</button>
+                <div v-if="item.day === 0">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Monday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 1">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Tuesday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 2">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Wednesday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 3">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Thursday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 4">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Friday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 5">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Saturday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>
+                <div v-else-if="item.day === 6">
+                    <p><a :href="item.link">{{item.name}}</a>
+                    Sunday at {{item.time}}
+                    <button v-on:click="remove(item.id)" class="delete">X</button></p>
+                </div>                                
             </div>
         </div>
     </div>
@@ -96,7 +128,7 @@ export default {
 }
 
 .delete {
-    display: inline-block;
+    display: inline;
     float: right;
     background-color: #e5b121;
     border:none;

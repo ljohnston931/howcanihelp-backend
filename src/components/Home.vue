@@ -21,25 +21,7 @@ export default {
         
         }
     },
-    computed: {
-        notCommittedItems: function() {
-            if (this.show === 'notCommitted')
-                return this.items.filter(function(item) {
-                    return !item.committed;
-                });
-        },
-        filteredItems: function() {
-            if (this.show === 'notCommitted')
-            return this.items.filter(function(item) {
-                return !item.committed;
-            });
-            if (this.show === 'committed')
-            return this.items.filter(function(item) {
-                return item.committed;
-            });
-            return this.items;
-        },
-    },
+
     created: function() {
         //this.getItems();
     },
@@ -123,6 +105,7 @@ export default {
 }
 
 .bottom-left {
+    font-family: 'Montserrat', sans-serif;
     position: absolute;
     bottom: 30px;
     max-width: 80%;
