@@ -13,9 +13,32 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('./knexfile')[env];
 const knex = require('knex')(config);
 
+//jwt setup
+//source .env;
+const jwt = require('jsonwebtoken');
+let jwtSecret = process.env.jwtSecret;
+if (jwtSecret == undefined) {
+    console.log("You need to define a jwtSecret to continue.");
+    knex.destroy();
+    process.exit();
+}
+
 //bcrypt Setup
-let bycript = require('bcrypt');
+let bcrypt = require('bcrypt');
 const saltRounds = 10;
+
+//verify token
+const verifyToken = (req,res,next) => {
+    const token = req.headers['authorization'];
+    if (!token)
+        return res.status(403).send({ error: 'No token provided.' });
+    jwt.verify(token,jwtSecret,function(err,decoded) {
+        if(err)
+            return res.status(500).send({ error: "Failed to authenicate token." });
+        req.userID = decoded.id;
+        next();
+        });
+}
 
 //login
 app.post('/api/login', (req,res) => {
@@ -29,10 +52,14 @@ app.post('/api/login', (req,res) => {
         }
         return [bcrypt.compare(req.body.password, user.hash),user];
     }).spread((result,user) => {
-        if (result)
-            res.status(200).json({user:{user_id:user.user_id, username:user.username, hash:user.hash, role:user.role}})
-        else
+        if (result) {
+            let token = jwt.sign({id: user.id}, jwtSecret, {
+                expiresIn: 86400
+            });
+            res.status(200).json({user:{user_id:user.user_id, username:user.username},token:token});
+        } else {
             res.status(403).send("Invalid credentials");
+        }
         return;
         }).catch(error => {
             if (error.message !== 'abort') {
@@ -58,7 +85,10 @@ app.post('/api/users',(req,res) => {
     }).then(ids => {
         return knex('users').where('user_id',ids[0]).first().select('user_id','username');
     }).then(user => {
-        res.status(200).json({user:user});
+        let token = jwt.sign({id:user.user_id},jwtSecret,{
+            expiresIn: 86400
+        });
+        res.status(200).json({user:user,token:token});
         return;
     }).catch(error => {
         if (error.message !== 'abort') {
@@ -72,7 +102,12 @@ app.post('/api/users',(req,res) => {
 
 
 //create an activity
-app.post('/api/activities', (req,res) => {
+app.post('/api/activities', verifyToken, (req,res) => {
+    if (req.body.user_id !== req.userID)
+    {
+        res.status(403).send();
+        return;
+    }
     if (!req.body.name || !req.body.link || !req.body.day || !req.body.time || !req.body.description)
         return res.status(400).send();
     knex('activities').insert({name: req.body.name, 
@@ -109,6 +144,18 @@ app.get('/api/activities/:day', (req, res) => {
     }).catch(error => {
         console.log(error);
         res.status(500).json({error});
+    });
+});
+
+//get my account
+app.get('/api/me',verifyToken, (req,res) => {
+    //console.log("id is"+ req.user_id+req.id);
+    knex('users').where('user_id',req.userID).first().select('username','user_id')
+    .then(user => {
+        res.status(200).json({user:user});
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({ error });
     });
 });
 

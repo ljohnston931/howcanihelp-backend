@@ -41,7 +41,7 @@ export default {
         },
     },
     created: function() {
-        this.getItems();
+        //this.getItems();
     },
     methods: {
         getItems: function() {

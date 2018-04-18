@@ -35,7 +35,7 @@
 <script>
 import axios from 'axios';
 export default {
-    name: 'Submit',
+    name: 'Add',
     data () {
         return {
             items: [],

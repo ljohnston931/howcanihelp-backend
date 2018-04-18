@@ -1,8 +1,9 @@
 <template>
     <div class="header">
-        <ul id="menu">
-            <li><router-link to="/">Home</router-link></li>
-            <li>
+        <div v-if="loggedIn">
+            <ul id="menu">
+                <li><router-link to="/">Home</router-link></li>
+                <li>
                     <router-link to="/which_day">Days<i class="fa fa-angle-down" aria-hidden="true"></i></router-link>
                     <ul class="hidden">
                         <li><router-link to='/monday'>Monday</router-link></li>
@@ -12,16 +13,47 @@
                         <li><router-link to='/friday'>Friday</router-link></li>
                         <li><router-link to='/saturday'>Saturday</router-link></li>
                         <li><router-link to='/sunday'>Sunday</router-link></li>
-                  </ul>
+                    </ul>
                 </li>
-            <li><router-link to='/submit'>Submit</router-link></li>
-        </ul>
+                <li><router-link to='/add'>Admin</router-link>
+                    <ul class="hidden">
+                        <li><router-link to='/add'>Add</router-link></li>
+                        <li><router-link to='/'>Delete</router-link></li>
+                        <li><router-link to='/register'>Register</router-link></li>
+                        <li><router-link to='/'>Logout</router-link></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
+            <ul id="menu">
+                <li><router-link to="/">Home</router-link></li>
+                <li>
+                    <router-link to="/which_day">Days<i class="fa fa-angle-down" aria-hidden="true"></i></router-link>
+                    <ul class="hidden">
+                        <li><router-link to='/monday'>Monday</router-link></li>
+                        <li><router-link to='/tuesday'>Tuesday</router-link></li>
+                        <li><router-link to='/wednesday'>Wednesday</router-link></li>
+                        <li><router-link to='/thursday'>Thursday</router-link></li>
+                        <li><router-link to='/friday'>Friday</router-link></li>
+                        <li><router-link to='/saturday'>Saturday</router-link></li>
+                        <li><router-link to='/sunday'>Sunday</router-link></li>
+                    </ul>
+                </li>
+            <li><router-link to='/login'>Login</router-link></li>
+            </ul>
+        </div> 
     </div>
 </template>
 
 <script>
 export default {
-    name: 'AppHeader'
+    name: 'AppHeader',
+    computed: {
+        loggedIn: function() {
+            return this.$store.getters.loggedin;
+        }
+    }
 }
 </script>
 
@@ -36,7 +68,7 @@ export default {
     position: relative;
     z-index: 3000;
 }
-.header ul {
+ul {
     list-style-type:none;
     margin:0;
     padding:0;
@@ -44,13 +76,13 @@ export default {
 
 }
 
-.header li {
+li {
     display:inline-block;
     float: left;
     margin-right:10px;
 }
 
-.header li a {
+li a {
     display: block;
     min-width: 140px;
     height: 50px;
@@ -65,7 +97,7 @@ export default {
     background-color: #e5b121 !important;
 }
 
-.header a:hover {
+a:hover {
     background: #e5b121;
 }
 

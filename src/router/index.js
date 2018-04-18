@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import WhichDay from '@/components/WhichDay'
-import Submit from '@/components/Submit.vue'
+import Add from '@/components/Add.vue'
 import Monday from '@/components/Monday.vue'
 import Tuesday from '@/components/Tuesday.vue'
 import Wednesday from '@/components/Wednesday.vue'
@@ -10,6 +10,9 @@ import Thursday from '@/components/Thursday.vue'
 import Friday from '@/components/Friday.vue'
 import Saturday from '@/components/Saturday.vue'
 import Sunday from '@/components/Sunday.vue'
+import NewActivities from '@/components/NewActivities.vue'
+import LogIn from '@/components/LogIn.vue'
+import Register from '@/components/Register.vue'
 
 Vue.use(Router)
 
@@ -26,9 +29,9 @@ export default new Router({
       component: WhichDay
     },
     {
-      path: '/submit',
-      name: 'Submit',
-      component: Submit
+      path: '/add',
+      name: 'Add',
+      component: Add
     },
     {
       path: '/monday',
@@ -64,6 +67,21 @@ export default new Router({
       path: '/sunday',
       name: 'Sunday',
       component: Sunday
+    },
+    {
+      path: '/new-activities',
+      name: 'NewActivities',
+      component: NewActivities,
+    },
+    {
+      path: '/login',
+      name: 'LogIn',
+      component: LogIn,
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register,
     },
   ]
 })
