@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div class="header">
         <ul id="menu">
             <li><router-link to="/">Home</router-link></li>
@@ -14,24 +14,35 @@
                     <li><router-link to='/sunday'>Sunday</router-link></li>
                 </ul>
             </li>
-        <li><router-link to='/new-activities'>Login</router-link></li>
+            <li><router-link to='/add'>Admin</router-link>
+                <ul class="hidden">
+                    <li><router-link to='/add'>Add</router-link></li>
+                    <li><router-link to='/delete'>Delete</router-link></li>
+                    <li><router-link to='/register'>Register</router-link></li>
+                </ul>
+            </li>
+            <li><a @click="logout" href="#">Logout</a></li>
         </ul>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'AppHeader',
+    name: 'AHAdmin',
     computed: {
         loggedIn: function() {
             return this.$store.getters.loggedin;
+        }
+    },
+    methods: {
+        logout: function() {
+            this.$store.dispatch('logout');
         }
     }
 }
 </script>
 
 <style scoped>
-
 .header {
     font-size: 20px;
     padding: 20px 50px 50px 50px;

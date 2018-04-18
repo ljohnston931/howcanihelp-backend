@@ -54,7 +54,7 @@ app.post('/api/login', (req,res) => {
     }).spread((result,user) => {
         if (result) {
             let token = jwt.sign({id: user.id}, jwtSecret, {
-                expiresIn: 86400
+                //expiresIn: 86400
             });
             res.status(200).json({user:{user_id:user.user_id, username:user.username},token:token});
         } else {
@@ -86,7 +86,7 @@ app.post('/api/users',(req,res) => {
         return knex('users').where('user_id',ids[0]).first().select('user_id','username');
     }).then(user => {
         let token = jwt.sign({id:user.user_id},jwtSecret,{
-            expiresIn: 86400
+            //expiresIn: 86400
         });
         res.status(200).json({user:user,token:token});
         return;
@@ -149,13 +149,26 @@ app.get('/api/activities/:day', (req, res) => {
 
 //get my account
 app.get('/api/me',verifyToken, (req,res) => {
-    //console.log("id is"+ req.user_id+req.id);
+    console.log("id is "+ req.userID);
     knex('users').where('user_id',req.userID).first().select('username','user_id')
     .then(user => {
         res.status(200).json({user:user});
     }).catch(error => {
         console.log(error);
         res.status(500).json({ error });
+    });
+});
+
+//delete activity
+app.delete('/api/activities/:id',(req,res) => {
+    let id = parseInt(req.params.id);
+    knex('activities').where('id',id).first().del()
+    .then(activity => {
+        res.sendStatus(200);
+        return;
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({error});
     });
 });
 

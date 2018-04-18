@@ -13,6 +13,9 @@ import Sunday from '@/components/Sunday.vue'
 import NewActivities from '@/components/NewActivities.vue'
 import LogIn from '@/components/LogIn.vue'
 import Register from '@/components/Register.vue'
+import AH from '@/components/AH.vue'
+import AHAdmin from '@/components/AHAdmin.vue'
+import Delete from '@/components/Delete.vue'
 
 Vue.use(Router)
 
@@ -83,5 +86,20 @@ export default new Router({
       name: 'Register',
       component: Register,
     },
+    {
+      path: '/a-h',
+      name: 'AH',
+      component: AH,
+    },
+    {
+      path: '/a-h-admin',
+      name: 'AHAdmin',
+      component: AHAdmin,
+    },
+    {
+      path: '/delete',
+      name: 'Delete',
+      component: Delete,
+    }
   ]
 })

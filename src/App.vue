@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <app-header/>
+    <a-h/>
     <router-view/>
     <app-footer/>
   </div>
 </template>
 
 <script>
-import AppHeader from './components/AppHeader';
+import AH from './components/AH';
 import AppFooter from './components/AppFooter';
 export default {
   name: 'App',
-  components: { AppHeader, AppFooter }
+  components: { AH, AppFooter }
 }
 </script>
 

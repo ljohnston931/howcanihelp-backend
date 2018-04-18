@@ -104,7 +104,6 @@ export default new Vuex.Store({
 
         //login
         login(context,user) {
-            console.log(1);
            return axios.post("/api/login",user)
             .then(response => {
                 console.log(this.state.loggedIn);
@@ -160,12 +159,21 @@ export default new Vuex.Store({
 
         //get activities for a specific day
         getActivities(context, day) {
-            console.log()
             axios.get("/api/activities/" + day)
             .then(response => {
                 context.commit('setActivities',response.data.activities);
             }).catch(err => {
                 console.log("getActivities failed: ",err);
+            });
+        },
+        
+        //delete an activity
+        deleteActivity(context, id) {
+            return axios.delete("/api/activities/" + id)
+            .then(response => {
+            context.dispatch('getActivities');
+            }).catch(err => {
+                console.log("delete failed: ",err);
             });
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="main">
-                <h2>Register as an Admin</h2>
+                <h2>Register a New Admin</h2>
                 <form v-on:submit.prevent="register">
                     <label for="username">Choose Username:</label>
                     <input type="text" id="regUsername" v-model="username">
